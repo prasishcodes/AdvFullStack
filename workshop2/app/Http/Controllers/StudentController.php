@@ -72,6 +72,7 @@ class StudentController extends Controller
                 Rule::unique('students')->ignore($student?->id),
             ],
             'phone' => 'required|string|max:20',
+            'course' => 'nullable|string|max:255',
             'address' => 'nullable|string|max:500',
             'date_of_birth' => 'nullable|date',
         ];
