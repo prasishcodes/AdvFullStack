@@ -10,7 +10,9 @@ class CourseController extends Controller
 {
     public function index()
     {
-        return view('course.list', ['courses' => Course::all()]);
+        return view('course.list', [
+            'courses' => Course::all(),
+        ]);
     }
 
     public function create()
@@ -24,22 +26,26 @@ class CourseController extends Controller
 
         return redirect()
             ->route('courses.index')
-            ->with('success', "Course {$course->name} created successfully!");
+            ->with('success', "Course {$course->title} added successfully!");
     }
 
     public function show(Course $course)
     {
-        return view('course.detail', ['course' => $course]);
+        return view('course.detail', [
+            'course' => $course,
+        ]);
     }
 
     public function edit(Course $course)
     {
-        return view('course.edit', ['course' => $course]);
+        return view('course.edit', [
+            'course' => $course,
+        ]);
     }
 
     public function update(Request $request, Course $course)
     {
-        $course->update($request->validate($this->rules()));
+        $course->update($request->validate($this->rules($course)));
 
         return redirect()
             ->route('courses.show', $course)
@@ -55,15 +61,18 @@ class CourseController extends Controller
             ->with('success', 'Course deleted successfully!');
     }
 
-    private function rules(): array
+    private function rules(?Course $course = null): array
     {
         return [
-            'name' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'duration' => 'required|integer|min:1',
-            'fee' => 'required|numeric|min:0',
-            'difficulty' => ['required', Rule::in(['Easy', 'Medium', 'Hard'])],
-            'is_active' => 'boolean',
+            'code' => [
+                'required',
+                'string',
+                'max:50',
+                Rule::unique('courses', 'code')->ignore($course?->id),
+            ],
+            'title' => 'required|string|max:255',
+            'credits' => 'required|integer|min:1|max:60',
+            'description' => 'nullable|string|max:1000',
         ];
     }
 }
