@@ -11,12 +11,10 @@ class CourseResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'name' => $this->name,
+            'code' => $this->code,
+            'title' => $this->title,
+            'credits' => $this->credits,
             'description' => $this->description,
-            'duration' => $this->duration,
-            'fee' => $this->fee,
-            'difficulty' => $this->difficulty,
-            'is_active' => $this->is_active,
         ];
     }
 }
